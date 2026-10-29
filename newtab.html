@@ -1,0 +1,783 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Yeni Sekme | Nova Tab</title>
+  <!-- Nova Tab Favicon (Tab Icon) -->
+  <link rel="icon" type="image/svg+xml" href="icons/favicon.svg">
+  <link rel="icon" type="image/png" sizes="48x48" href="icons/icon48.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="icons/icon16.png">
+  <link rel="shortcut icon" href="icons/favicon.svg">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body class="theme-gradient-1">
+  <!-- Interactive Fluid/Particle Canvas Layer -->
+  <canvas id="interactive-canvas" class="interactive-canvas"></canvas>
+
+  <!-- Dedicated Custom Wallpaper / Image Layer -->
+  <div id="bg-image-layer" class="bg-image-layer"></div>
+
+  <!-- Live Video Background (Plays seamlessly if video theme selected) -->
+  <video id="bg-video" class="bg-video" autoplay loop muted playsinline preload="auto"></video>
+
+  <!-- Dynamic Gradient & Glass Overlay Layer -->
+  <div id="bg-overlay" class="bg-overlay"></div>
+
+  <!-- Main Dashboard Container -->
+  <!-- ── Fixed Chrome Controls (Settings, Tabs, Workspaces — never move) ── -->
+  <div id="chrome-controls" class="chrome-controls">
+    <!-- Tabs Manager Button -->
+    <button id="tabs-toggle-btn" class="glass-btn action-top-btn" title="Açık Sekmeleri Yönet">
+      <svg viewBox="0 0 24 24" width="17" height="17" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="18" height="18" x="3" y="3" rx="2"/><path d="M3 9h18"/><path d="M9 21V9"/></svg>
+      <span>Sekmeler</span>
+      <span id="tabs-badge" class="badge">0</span>
+    </button>
+
+    <!-- Workspaces Button -->
+    <button id="workspaces-toggle-btn" class="glass-btn action-top-btn" title="Çalışma Alanları">
+      <svg viewBox="0 0 24 24" width="17" height="17" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 20h16a2 2 0 0 0 2-2V8a2 2 0 0 0-2-2h-7.93a2 2 0 0 1-1.66-.9l-.82-1.2A2 2 0 0 0 7.93 3H4a2 2 0 0 0-2 2v13c0 1.1.9 2 2 2Z"/></svg>
+      <span>Çalışma Alanları</span>
+    </button>
+
+
+
+    <!-- Settings Button -->
+    <button id="settings-btn" class="glass-btn icon-btn" title="Ayarlar" aria-label="Ayarlar">
+      <svg viewBox="0 0 24 24" width="19" height="19" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+    </button>
+  </div>
+
+  <!-- ── 9-Zone Layout Grid ── -->
+  <div id="layout-zones" class="layout-zones">
+
+    <!-- Zone: top-left -->
+    <div class="zone" data-zone="top-left" data-zone-label="Sol Üst">
+      <!-- Weather Widget -->
+      <div id="weather-widget" class="glass-card weather-card" data-widget="weather-widget">
+        <div class="weather-icon" id="weather-icon">
+          <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="4"/><path d="M12 2v2"/><path d="M12 20v2"/><path d="m4.93 4.93 1.41 1.41"/><path d="m17.66 17.66 1.41 1.41"/><path d="M2 12h2"/><path d="M20 12h2"/><path d="m6.34 17.66-1.41 1.41"/><path d="m19.07 4.93-1.41 1.41"/></svg>
+        </div>
+        <div class="weather-info">
+          <span id="weather-temp" class="weather-temp">--°C</span>
+          <span id="weather-desc" class="weather-desc">Hava Durumu Yükleniyor...</span>
+        </div>
+      </div>
+
+      <!-- Daily Quote -->
+      <div id="quote-widget" class="glass-card top-quote-card" data-widget="quote-widget">
+        <p id="quote-text" class="quote-text">"Geleceği tahmin etmenin en iyi yolu, onu inşa etmektir."</p>
+        <div class="quote-footer">
+          <span id="quote-author" class="quote-author">— Alan Kay</span>
+          <button id="quote-refresh-btn" class="icon-btn-subtle" title="Yeni Söz Göster">
+            <svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12a9 9 0 0 1 9-9 9.75 9.75 0 0 1 6.74 2.74L21 8"/><path d="M21 3v5h-5"/><path d="M21 12a9 9 0 0 1-9 9 9.75 9.75 0 0 1-6.74-2.74L3 16"/><path d="M8 16H3v5"/></svg>
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Zone: top-center -->
+    <div class="zone" data-zone="top-center" data-zone-label="Orta Üst"></div>
+
+    <!-- Zone: top-right -->
+    <div class="zone" data-zone="top-right" data-zone-label="Sağ Üst">
+      <!-- Finance Ticker Widget -->
+      <div id="finance-widget" class="glass-card finance-card" data-widget="finance-widget">
+        <div id="finance-ticker" class="finance-ticker">
+          <!-- Populated via finance.js -->
+        </div>
+      </div>
+    </div>
+
+    <!-- Zone: mid-left -->
+    <div class="zone" data-zone="mid-left" data-zone-label="Sol Orta"></div>
+
+    <!-- Zone: mid-center -->
+    <div class="zone" data-zone="mid-center" data-zone-label="Merkez">
+      <!-- Clock Block -->
+      <div id="clock-block" class="clock-section" data-widget="clock-block">
+        <div id="clock" class="digital-clock">00:00</div>
+        <div id="date-display" class="date-display">10 Eylül 2026, Perşembe</div>
+        <div id="greeting" class="greeting-text">İyi günler</div>
+      </div>
+
+      <!-- Search Bar -->
+      <div id="search-section" class="search-section" data-widget="search-section">
+        <div class="search-engines" id="search-engines">
+          <button class="engine-pill active" data-engine="google"><span class="engine-icon">G</span> Google</button>
+          <button class="engine-pill" data-engine="chatgpt"><span class="engine-icon">✦</span> ChatGPT</button>
+          <button class="engine-pill" data-engine="perplexity"><span class="engine-icon">⌘</span> Perplexity</button>
+          <button class="engine-pill" data-engine="youtube"><span class="engine-icon">▶</span> YouTube</button>
+          <button class="engine-pill" data-engine="github"><span class="engine-icon">⑂</span> GitHub</button>
+        </div>
+        <form id="search-form" class="search-box glass-card">
+          <div class="search-input-icon">
+            <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
+          </div>
+          <input type="text" id="search-input" placeholder="Google'da ara veya bir bağlantı yaz..." autocomplete="off" autofocus>
+          <div class="search-hint"><kbd>/</kbd></div>
+          <button type="submit" class="search-submit-btn" aria-label="Ara">
+            <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
+          </button>
+        </form>
+      </div>
+
+      <!-- Shortcuts -->
+      <div id="shortcuts-section" class="shortcuts-section" data-widget="shortcuts-section">
+        <div class="shortcuts-grid" id="shortcuts-grid">
+          <!-- Populated and draggable via shortcuts.js -->
+        </div>
+      </div>
+    </div>
+
+    <!-- Zone: mid-right -->
+    <div class="zone" data-zone="mid-right" data-zone-label="Sağ Orta"></div>
+
+    <!-- Zone: bot-left -->
+    <div class="zone" data-zone="bot-left" data-zone-label="Sol Alt">
+      <!-- Radar Widget -->
+      <div id="radar-widget" class="glass-card radar-pill" data-widget="radar-widget" role="button" tabindex="0" title="Günün Canlı Radarı — Detaylar için tıkla">
+        <div class="radar-icon-wrap">
+          <span class="radar-ping-ring"></span>
+          <span class="radar-live-dot"></span>
+          <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="12" cy="12" r="10"/>
+            <path d="M12 6a6 6 0 1 0 6 6"/>
+            <circle cx="12" cy="12" r="2"/>
+          </svg>
+        </div>
+        <div class="radar-pill-content">
+          <div class="radar-pill-header">
+            <span class="radar-pill-title">Günün Radarı</span>
+            <span class="radar-pill-badge">CANLI</span>
+          </div>
+          <div class="radar-pill-sub" id="radar-pill-preview">Yapay zeka, araçlar ve bilim keşifleri ↗</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Zone: bot-center -->
+    <div class="zone" data-zone="bot-center" data-zone-label="Orta Alt"></div>
+
+    <!-- Zone: bot-right -->
+    <div class="zone" data-zone="bot-right" data-zone-label="Sağ Alt">
+      <!-- Action Buttons Group -->
+      <div id="bottom-actions" class="bottom-actions" data-widget="bottom-actions">
+        <button id="analytics-toggle-btn" class="glass-btn action-btn" title="Gizlilik Odaklı Ekran Süresi &amp; İstatistikler">
+          <svg viewBox="0 0 24 24" width="17" height="17" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+          <span>İstatistikler</span>
+        </button>
+        <button id="todo-toggle-btn" class="glass-btn action-btn">
+          <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m9 11 3 3L22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg>
+          <span>Yapılacaklar</span>
+          <span id="todo-badge" class="badge">0</span>
+        </button>
+        <button id="notes-toggle-btn" class="glass-btn action-btn">
+          <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9"/><path d="M16.5 3.5a2.12 2.12 0 0 1 3 3L7 19l-4 1 1-4Z"/></svg>
+          <span>Hızlı Notlar</span>
+        </button>
+      </div>
+    </div>
+
+  </div><!-- /#layout-zones -->
+
+  <!-- Analytics / Screen Time Drawer -->
+  <aside id="analytics-drawer" class="drawer glass-drawer">
+    <div class="drawer-header">
+      <div class="drawer-title">
+        <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+        <h3>Kullanım İstatistikleri</h3>
+      </div>
+      <button id="analytics-close-btn" class="icon-btn-subtle" aria-label="Kapat">
+        <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg>
+      </button>
+    </div>
+
+    <div class="analytics-content">
+      <div class="privacy-pill-notice">
+        🔒 %100 Gizli: Verileriniz yalnızca cihazınızda saklanır, hiçbir sunucuya iletilmez.
+      </div>
+
+      <div class="analytics-stat-cards">
+        <div class="glass-card stat-card">
+          <span class="stat-label">Bugünkü Aktif Süre</span>
+          <span id="analytics-screen-time" class="stat-number">0 sa 0 dk</span>
+        </div>
+        <div class="glass-card stat-card">
+          <span class="stat-label">Açılan Sekmeler</span>
+          <span id="analytics-tabs-opened" class="stat-number">0 Sekme</span>
+        </div>
+      </div>
+
+      <div class="analytics-section-title">En Çok Ziyaret Edilen Siteler</div>
+      <div id="analytics-domain-list" class="analytics-domains">
+        <!-- Populated via analytics.js -->
+      </div>
+    </div>
+
+    <div class="drawer-footer">
+      <button id="analytics-reset-btn" class="text-btn-subtle">Bugünkü Verileri Sıfırla</button>
+    </div>
+  </aside>
+
+  <!-- Tabs Manager Drawer -->
+  <aside id="tabs-drawer" class="drawer glass-drawer">
+    <div class="drawer-header">
+      <div class="drawer-title">
+        <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="18" height="18" x="3" y="3" rx="2"/><path d="M3 9h18"/><path d="M9 21V9"/></svg>
+        <h3>Açık Sekmeler</h3>
+      </div>
+      <div class="drawer-header-actions">
+        <button id="tabs-refresh-btn" class="icon-btn-subtle" title="Yenile">
+          <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12a9 9 0 0 1 9-9 9.75 9.75 0 0 1 6.74 2.74L21 8"/><path d="M21 3v5h-5"/><path d="M21 12a9 9 0 0 1-9 9 9.75 9.75 0 0 1-6.74-2.74L3 16"/><path d="M8 16H3v5"/></svg>
+        </button>
+        <button id="tabs-close-btn" class="icon-btn-subtle" aria-label="Kapat">
+          <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg>
+        </button>
+      </div>
+    </div>
+
+    <div class="tabs-toolbar">
+      <input type="text" id="tabs-search-input" placeholder="Açık sekmelerde ara..." autocomplete="off">
+      <button id="tabs-park-all-btn" class="glass-btn park-btn" title="Tüm harici sekmeleri çalışma alanına kaydet ve kapatıp RAM'i boşalt">
+        <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/><polyline points="7 3 7 8 15 8"/></svg>
+        Park Et & Kapat
+      </button>
+    </div>
+
+    <ul id="tabs-list" class="tabs-list">
+      <!-- Populated via tabs-manager.js -->
+    </ul>
+  </aside>
+
+  <!-- Workspaces Drawer -->
+  <aside id="workspaces-drawer" class="drawer glass-drawer">
+    <div class="drawer-header">
+      <div class="drawer-title">
+        <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 20h16a2 2 0 0 0 2-2V8a2 2 0 0 0-2-2h-7.93a2 2 0 0 1-1.66-.9l-.82-1.2A2 2 0 0 0 7.93 3H4a2 2 0 0 0-2 2v13c0 1.1.9 2 2 2Z"/></svg>
+        <h3>Çalışma Alanları</h3>
+      </div>
+      <button id="workspaces-close-btn" class="icon-btn-subtle" aria-label="Kapat">
+        <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg>
+      </button>
+    </div>
+
+    <div class="workspaces-toolbar">
+      <button id="workspace-create-btn" class="glass-btn primary-btn" style="flex:1;">+ Yeni Alan Oluştur</button>
+      <button id="workspace-save-current-btn" class="glass-btn" title="Şu an açık olan sekmeleri yeni alan olarak kaydet">Açık Sekmeleri Kaydet</button>
+    </div>
+
+    <div id="workspaces-list" class="workspaces-list">
+      <!-- Populated via workspaces.js -->
+    </div>
+  </aside>
+
+  <!-- To-Do Drawer -->
+  <aside id="todo-drawer" class="drawer glass-drawer">
+    <div class="drawer-header">
+      <div class="drawer-title">
+        <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m9 11 3 3L22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg>
+        <h3>Yapılacaklar Listesi</h3>
+      </div>
+      <button id="todo-close-btn" class="icon-btn-subtle" aria-label="Kapat">
+        <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg>
+      </button>
+    </div>
+
+    <form id="todo-form" class="todo-form">
+      <input type="text" id="todo-input" placeholder="Yeni görev ekle... (Enter)" autocomplete="off">
+      <button type="submit" class="glass-btn primary-btn">Ekle</button>
+    </form>
+
+    <div class="todo-filters">
+      <button class="filter-btn active" data-filter="all">Tümü (<span id="todo-count-all">0</span>)</button>
+      <button class="filter-btn" data-filter="active">Aktif</button>
+      <button class="filter-btn" data-filter="completed">Tamamlanan</button>
+    </div>
+
+    <ul id="todo-list" class="todo-list">
+      <!-- Populated via todo.js -->
+    </ul>
+
+    <div class="drawer-footer">
+      <button id="todo-clear-completed" class="text-btn-subtle">Tamamlananları Temizle</button>
+    </div>
+  </aside>
+
+  <!-- Notes Drawer -->
+  <aside id="notes-drawer" class="drawer glass-drawer">
+    <div class="drawer-header">
+      <div class="drawer-title">
+        <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9"/><path d="M16.5 3.5a2.12 2.12 0 0 1 3 3L7 19l-4 1 1-4Z"/></svg>
+        <h3>Hızlı Not Defteri</h3>
+      </div>
+      <button id="notes-close-btn" class="icon-btn-subtle" aria-label="Kapat">
+        <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg>
+      </button>
+    </div>
+
+    <div class="notes-body">
+      <textarea id="quick-notes" placeholder="Aklınıza gelen fikirleri, yapılacak araştırmaları veya geçici metinleri buraya yazın... Otomatik Google hesabınızla eşitlenir."></textarea>
+    </div>
+
+    <div class="notes-footer">
+      <span id="notes-word-count" class="status-text">0 kelime, 0 karakter</span>
+      <span id="notes-saved-indicator" class="status-indicator">Buluta Eşitlendi ✓</span>
+    </div>
+  </aside>
+
+  <!-- Add Shortcut Modal -->
+  <div id="shortcut-modal" class="modal-overlay">
+    <div class="modal-box glass-card">
+      <div class="modal-header">
+        <div class="modal-title">
+          <h3>Hızlı Bağlantı Ekle</h3>
+        </div>
+        <button id="shortcut-close-btn" class="icon-btn-subtle" aria-label="Kapat">
+          <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg>
+        </button>
+      </div>
+
+      <form id="shortcut-form" class="modal-form">
+        <div class="form-group">
+          <label for="shortcut-title-input">Site Başlığı</label>
+          <input type="text" id="shortcut-title-input" placeholder="Örn: GitHub" required>
+        </div>
+        <div class="form-group">
+          <label for="shortcut-url-input">Bağlantı URL'si</label>
+          <input type="url" id="shortcut-url-input" placeholder="https://github.com" required>
+        </div>
+        <div class="modal-actions">
+          <button type="button" id="shortcut-cancel-btn" class="glass-btn">İptal</button>
+          <button type="submit" class="glass-btn primary-btn">Kaydet</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Settings Modal -->
+  <div id="settings-modal" class="modal-overlay">
+    <div class="modal-box glass-card settings-modal-box">
+      <div class="modal-header">
+        <div class="modal-title">
+          <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+          <h3>Nova Tab Ayarları</h3>
+        </div>
+        <button id="settings-close-btn" class="icon-btn-subtle" aria-label="Kapat">
+          <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg>
+        </button>
+      </div>
+
+      <div class="settings-content">
+        <!-- User Name -->
+        <div class="setting-item">
+          <label for="setting-username">Kullanıcı Adı (Gözüken İsim):</label>
+          <input type="text" id="setting-username" placeholder="Adınız">
+        </div>
+
+        <!-- Weather Location Settings -->
+        <div class="setting-item">
+          <label>Hava Durumu Şehir Tercihi:</label>
+          <div class="checkbox-row" style="margin-bottom:6px;">
+            <label class="custom-checkbox">
+              <input type="checkbox" id="setting-weather-auto" checked>
+              <span>Konumu Otomatik Belirle (GPS/IP)</span>
+            </label>
+          </div>
+          <input type="text" id="setting-weather-city" placeholder="Özel Şehir Girin (Örn: Ankara, İzmir, Londra)">
+        </div>
+
+        <!-- Clock Format -->
+        <div class="setting-item">
+          <label>Saat Tercihleri:</label>
+          <div class="checkbox-row">
+            <label class="custom-checkbox">
+              <input type="checkbox" id="setting-seconds">
+              <span>Saniyeleri Göster</span>
+            </label>
+            <label class="custom-checkbox">
+              <input type="checkbox" id="setting-12h">
+              <span>12 Saat Formatı (AM/PM)</span>
+            </label>
+          </div>
+        </div>
+
+        <!-- Background Presets (Interactive, Video & Static) -->
+        <div class="setting-item">
+          <label>Arka Plan Teması:</label>
+          <div class="theme-presets" id="theme-presets">
+            <!-- Interactive Canvas Particle Theme -->
+            <button class="preset-btn theme-opt" data-theme="interactive" title="İnteraktif 3D Parçacıklar (Fareye Duyarlı)">
+              <span class="preset-preview interactive-bg"></span>
+              <span>🌌 Parçacık</span>
+            </button>
+
+            <!-- Live Video Themes -->
+            <button class="preset-btn theme-opt" data-theme="video-lofi" title="Canlı Lo-Fi Çalışma Odası">
+              <span class="preset-preview lofi-bg"></span>
+              <span>🎥 Lo-Fi</span>
+            </button>
+            <button class="preset-btn theme-opt" data-theme="video-rain" title="Canlı Yağmurlu Pencere">
+              <span class="preset-preview rain-bg"></span>
+              <span>🎥 Yağmur</span>
+            </button>
+            <button class="preset-btn theme-opt" data-theme="video-cyber" title="Canlı Siberpunk Şehir">
+              <span class="preset-preview cyber-bg"></span>
+              <span>🎥 Siberpunk</span>
+            </button>
+
+            <!-- Static Gradient Themes -->
+            <button class="preset-btn theme-opt active" data-theme="gradient-1" title="Kozmik Mor">
+              <span class="preset-preview grad-1"></span>
+              <span>Kozmik</span>
+            </button>
+            <button class="preset-btn theme-opt" data-theme="gradient-2" title="Derin Okyanus">
+              <span class="preset-preview grad-2"></span>
+              <span>Okyanus</span>
+            </button>
+            <button class="preset-btn theme-opt" data-theme="gradient-3" title="Siber Gece">
+              <span class="preset-preview grad-3"></span>
+              <span>Siberpunk</span>
+            </button>
+            <button class="preset-btn theme-opt" data-theme="nature" title="Doğa Manzarası">
+              <span class="preset-preview nature-bg"></span>
+              <span>Doğa</span>
+            </button>
+            <button class="preset-btn theme-opt" data-theme="minimal-dark" title="Minimal Siyah">
+              <span class="preset-preview dark-bg"></span>
+              <span>Minimal</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- Custom Wallpaper URL & File Upload -->
+        <div class="setting-item custom-bg-setting-group">
+          <label for="setting-custom-bg">Özel Resim / Video / Pinterest Desteği:</label>
+          <div class="custom-bg-input-wrapper">
+            <input type="url" id="setting-custom-bg" placeholder="Pinterest pini, doğrudan resim veya .mp4 video linki">
+            <button type="button" id="setting-custom-bg-clear" class="icon-btn-subtle" title="Özel Arka Planı Kaldır">
+              <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+            </button>
+          </div>
+          <p class="setting-hint">💡 <strong>İpucu:</strong> Pinterest veya Unsplash linkleri otomatik olarak en yüksek Ultra HD/Orijinal çözünürlüğe yükseltilir. Bilgisayarınızdan 1080p/4K resim ve videolar da yükleyebilirsiniz.</p>
+
+          <!-- Local File Upload (Video & Images) -->
+          <div class="local-upload-container">
+            <label class="local-upload-btn glass-btn" for="setting-local-file">
+              <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+              <span>Bilgisayardan Resim/Video Yükle</span>
+            </label>
+            <input type="file" id="setting-local-file" accept="image/*,video/mp4,video/webm,video/ogg" style="display:none;">
+            <span id="local-file-status" class="local-file-status"></span>
+          </div>
+
+          <!-- v4 Arka Plan İnce Ayar Kontrolleri (Transform & Blur) -->
+          <div class="bg-adjustments-panel">
+            <div class="bg-adjustments-header">
+              <span class="bg-adjustments-title">🎨 Arka Plan Efekt & Konum Ayarları</span>
+              <button type="button" id="bg-adjust-reset" class="text-btn-subtle" title="Ayarları Sıfırla">Sıfırla</button>
+            </div>
+
+            <!-- v4.5 Live Preview -->
+            <div class="bg-preview-frame">
+              <div class="bg-preview-viewport">
+                <div id="bg-preview-layer" class="bg-preview-content"></div>
+                <video id="bg-preview-video" class="bg-preview-video" muted loop playsinline></video>
+                <div class="bg-preview-scrim"></div>
+                <div class="bg-preview-ui">
+                  <div class="preview-clock">12:00</div>
+                  <div class="preview-label">Önizleme</div>
+                </div>
+              </div>
+            </div>
+
+            <div class="bg-controls-grid">
+              <!-- Blur (Bulanıklık) -->
+              <div class="bg-control-row">
+                <div class="bg-control-label">
+                  <span>Bulanıklık (Blur):</span>
+                  <span id="val-bg-blur">0px</span>
+                </div>
+                <input type="range" id="setting-bg-blur" min="0" max="30" step="1" value="0">
+              </div>
+
+              <!-- Zoom (Yakınlaştırma) -->
+              <div class="bg-control-row">
+                <div class="bg-control-label">
+                  <span>Yakınlaştırma (Zoom):</span>
+                  <span id="val-bg-zoom">100%</span>
+                </div>
+                <input type="range" id="setting-bg-zoom" min="80" max="250" step="5" value="100">
+              </div>
+
+              <!-- Rotate (Döndürme) -->
+              <div class="bg-control-row">
+                <div class="bg-control-label">
+                  <span>Döndürme (Açı):</span>
+                  <span id="val-bg-rotate">0°</span>
+                </div>
+                <input type="range" id="setting-bg-rotate" min="-180" max="180" step="5" value="0">
+              </div>
+
+              <!-- Shift X (Yatay Kaydırma) -->
+              <div class="bg-control-row">
+                <div class="bg-control-label">
+                  <span>Yatay Kaydırma (X):</span>
+                  <span id="val-bg-shift-x">0%</span>
+                </div>
+                <input type="range" id="setting-bg-shift-x" min="-50" max="50" step="1" value="0">
+              </div>
+
+              <!-- Shift Y (Dikey Kaydırma) -->
+              <div class="bg-control-row">
+                <div class="bg-control-label">
+                  <span>Dikey Kaydırma (Y):</span>
+                  <span id="val-bg-shift-y">0%</span>
+                </div>
+                <input type="range" id="setting-bg-shift-y" min="-50" max="50" step="1" value="0">
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Design Customization: Accent Colors, Glass Style, Animations -->
+        <div class="setting-item">
+          <label>🎨 Tema Vurgu Rengi (Accent Palette):</label>
+          <div class="color-palette-grid" id="color-palette-presets">
+            <button type="button" class="color-palette-btn active" data-palette="purple" title="Kozmik Mor">
+              <span class="palette-swatch" style="background: linear-gradient(135deg, #8b5cf6, #38bdf8);"></span>
+              <span>Kozmik Mor</span>
+            </button>
+            <button type="button" class="color-palette-btn" data-palette="emerald" title="Siber Zümrüt">
+              <span class="palette-swatch" style="background: linear-gradient(135deg, #10b981, #06b6d4);"></span>
+              <span>Zümrüt Yeşil</span>
+            </button>
+            <button type="button" class="color-palette-btn" data-palette="azure" title="Derin Okyanus">
+              <span class="palette-swatch" style="background: linear-gradient(135deg, #0284c7, #38bdf8);"></span>
+              <span>Okyanus Mavi</span>
+            </button>
+            <button type="button" class="color-palette-btn" data-palette="rose" title="Neon Gün Batımı">
+              <span class="palette-swatch" style="background: linear-gradient(135deg, #f43f5e, #fb923c);"></span>
+              <span>Neon Gül</span>
+            </button>
+            <button type="button" class="color-palette-btn" data-palette="gold" title="Siberpunk Altın">
+              <span class="palette-swatch" style="background: linear-gradient(135deg, #f59e0b, #fbbf24);"></span>
+              <span>Siber Altın</span>
+            </button>
+            <button type="button" class="color-palette-btn" data-palette="mono" title="Zen Sade">
+              <span class="palette-swatch" style="background: linear-gradient(135deg, #ffffff, #94a3b8);"></span>
+              <span>Zen Sade</span>
+            </button>
+            <label class="color-palette-btn custom-color-btn" title="Kendi Rengini Seç">
+              <input type="color" id="setting-custom-color" value="#8b5cf6" style="opacity:0;position:absolute;pointer-events:none;">
+              <span class="palette-swatch custom-swatch" id="custom-color-preview" style="background: conic-gradient(red, yellow, lime, aqua, blue, magenta, red);"></span>
+              <span>Özel Renk</span>
+            </label>
+          </div>
+        </div>
+
+        <!-- Glass Effect & Opacity -->
+        <div class="setting-item">
+          <label>✨ Buzlu Cam (Glassmorphism) Yoğunluğu:</label>
+          <div class="segmented-control" id="glass-opacity-selector">
+            <button type="button" class="segmented-btn" data-glass="low">Ultra Şeffaf</button>
+            <button type="button" class="segmented-btn active" data-glass="medium">Buzlu Cam (Dengeli)</button>
+            <button type="button" class="segmented-btn" data-glass="solid">Katı Koyu / OLED</button>
+          </div>
+        </div>
+
+        <!-- Animation & Motion Speed -->
+        <div class="setting-item">
+          <label>🎭 Animasyon & Geçiş Hızı:</label>
+          <div class="segmented-control" id="motion-style-selector">
+            <button type="button" class="segmented-btn active" data-motion="fluid">🌊 Akıcı & Yaylanan</button>
+            <button type="button" class="segmented-btn" data-motion="snappy">⚡ Hızlı & Keskin</button>
+            <button type="button" class="segmented-btn" data-motion="zen">🍃 Zen (Sıfır Animasyon)</button>
+          </div>
+        </div>
+
+        <!-- Border Radius -->
+        <div class="setting-item">
+          <label>📐 Kart Köşe Kavisleri:</label>
+          <div class="segmented-control" id="radius-style-selector">
+            <button type="button" class="segmented-btn" data-radius="rounded">Oval (20px)</button>
+            <button type="button" class="segmented-btn active" data-radius="medium">Dengeli (14px)</button>
+            <button type="button" class="segmented-btn" data-radius="sharp">Keskin (6px)</button>
+          </div>
+        </div>
+
+        <!-- Widget Visibility (All Optional!) -->
+        <div class="setting-item">
+          <label>Görünür Bileşenler (Opsiyonel):</label>
+          <div class="toggle-grid">
+            <label class="custom-checkbox">
+              <input type="checkbox" id="toggle-radar" checked>
+              <span>Günün Radarı (3 Hap Bilgi)</span>
+            </label>
+            <label class="custom-checkbox">
+              <input type="checkbox" id="toggle-analytics-btn" checked>
+              <span>İstatistikler Butonu</span>
+            </label>
+            <label class="custom-checkbox">
+              <input type="checkbox" id="toggle-finance" checked>
+              <span>Finans / Kripto Takibi</span>
+            </label>
+            <label class="custom-checkbox">
+              <input type="checkbox" id="toggle-weather" checked>
+              <span>Hava Durumu</span>
+            </label>
+            <label class="custom-checkbox">
+              <input type="checkbox" id="toggle-quote" checked>
+              <span>Günün Sözü (Sol Üst)</span>
+            </label>
+            <label class="custom-checkbox">
+              <input type="checkbox" id="toggle-shortcuts" checked>
+              <span>Hızlı Bağlantılar</span>
+            </label>
+            <label class="custom-checkbox">
+              <input type="checkbox" id="toggle-notes-btn" checked>
+              <span>Notlar Butonu</span>
+            </label>
+            <label class="custom-checkbox">
+              <input type="checkbox" id="toggle-todo-btn" checked>
+              <span>Yapılacaklar Butonu</span>
+            </label>
+          </div>
+        </div>
+
+          <!-- Border Radius -->
+        <div class="setting-item">
+          <label>Tutorial</label>
+           <button type="button" id="tutorial-replay-btn" class="glass-btn action-btn-subtle" style="display:flex;align-items:center;gap:6px;" title="Tanıtım turunu tekrar başlat">
+          <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12a9 9 0 0 1 9-9 9.75 9.75 0 0 1 6.74 2.74L21 8"/><path d="M21 3v5h-5"/><path d="M21 12a9 9 0 0 1-9 9 9.75 9.75 0 0 1-6.74-2.74L3 16"/><path d="M8 16H3v5"/></svg>
+          <span>🎓 Tutorial</span>
+        </button>
+        </div>
+      </div>
+
+      <div class="modal-footer">
+        <button type="button" id="open-layout-editor-btn" class="glass-btn action-btn" style="margin-right:auto;display:flex;align-items:center;gap:6px;">
+          <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18"/><path d="M9 21V9"/></svg>
+          <span>📐 Düzeni Özelleştir (Sürükle-Bırak)</span>
+        </button>
+       
+        <button id="settings-save-btn" class="glass-btn primary-btn">Ayarları Kaydet</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Zero-Noise Daily Radar Modal -->
+  <div id="radar-modal" class="modal-overlay">
+    <div class="modal-box glass-card radar-modal-box">
+      <div class="modal-header radar-modal-header">
+        <div class="modal-title">
+          <div class="radar-modal-icon-badge">
+            <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="12" cy="12" r="10"/>
+              <path d="M12 6a6 6 0 1 0 6 6"/>
+              <circle cx="12" cy="12" r="2"/>
+            </svg>
+          </div>
+          <div>
+            <div class="radar-modal-title-row">
+              <h3>Günün Canlı Radarı</h3>
+              <span id="radar-live-indicator" class="radar-signal-pill">🟢 Canlı İnternet Akışı</span>
+            </div>
+            <p class="radar-modal-desc" id="radar-status-desc">Hacker News, Vikipedi, GitHub ve NASA'dan anlık güncellenen yüksek sinyalli günlük seçkiler.</p>
+          </div>
+        </div>
+        <div class="radar-header-actions">
+          <button id="radar-modal-refresh-btn" class="glass-btn action-btn-subtle" title="Canlı Verileri Yeniden Çek">
+            <svg id="radar-refresh-icon" viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M3 12a9 9 0 0 1 9-9 9.75 9.75 0 0 1 6.74 2.74L21 8"/>
+              <path d="M21 3v5h-5"/>
+              <path d="M21 12a9 9 0 0 1-9 9 9.75 9.75 0 0 1-6.74-2.74L3 16"/>
+              <path d="M8 16H3v5"/>
+            </svg>
+            <span id="radar-refresh-label">Yenile</span>
+          </button>
+          <button id="radar-modal-close-btn" class="icon-btn-subtle" aria-label="Kapat">
+            <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M18 6 6 18"/><path d="m6 6 12 12"/>
+            </svg>
+          </button>
+        </div>
+      </div>
+
+      <div class="modal-content radar-modal-content">
+        <!-- Radar Category Filter Tabs -->
+        <div class="radar-tabs-nav" id="radar-tabs-nav">
+          <button class="radar-tab-btn active" data-tab="all">🌟 Canlı Karma Radar</button>
+          <button class="radar-tab-btn" data-tab="tech">⚡ Hacker News & Trend</button>
+          <button class="radar-tab-btn" data-tab="history">📜 Tarihte Bugün (Vikipedi)</button>
+          <button class="radar-tab-btn" data-tab="github">🛠️ Trend Açık Kaynak</button>
+          <button class="radar-tab-btn" data-tab="space">🔭 NASA Keşfi</button>
+        </div>
+
+        <div id="radar-modal-cards" class="radar-modal-cards-grid">
+          <!-- Populated via radar.js -->
+        </div>
+      </div>
+
+      <div class="modal-footer radar-modal-footer">
+        <div class="radar-footer-hint">
+          <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>
+          <span id="radar-footer-text">Algoritma tuzağı ve sonsuz akış yok. İnternetin en kaliteli kaynaklarından canlı hap bilgiler.</span>
+        </div>
+        <button id="radar-modal-done-btn" class="glass-btn primary-btn">Kapat</button>
+      </div>
+    </div>
+  </div>
+
+
+  <!-- v5.5 Drag & Drop Layout Editing Toolbar -->
+  <div id="layout-edit-toolbar" class="layout-edit-toolbar">
+    <span class="layout-edit-hint">
+      <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m14.5 17.5 3-3 3 3"/><path d="m17.5 14.5 0 6"/><path d="m3 12.5 5.5-5.5 3.5 3.5"/><path d="M5 3H3v2"/><path d="M15 3h2v2"/><path d="M9 21h2a2 2 0 0 0 2-2"/></svg>
+      <span>Widget'ları ekranda serbestçe sürükle</span>
+    </span>
+    <div class="layout-edit-actions">
+      <button type="button" id="layout-edit-reset-btn" class="glass-btn action-btn-subtle">↺ Sıfırla</button>
+      <button type="button" id="layout-edit-cancel-btn" class="glass-btn action-btn-subtle">✕ Vazgeç</button>
+      <button type="button" id="layout-edit-save-btn" class="glass-btn primary-btn">✓ Kaydet</button>
+    </div>
+  </div>
+
+  <!-- v5.7 First-Run Tutorial Overlay -->
+  <div id="tutorial-overlay" class="tutorial-overlay">
+    <div class="tutorial-blocker"></div>
+    <div id="tutorial-spotlight" class="tutorial-spotlight"></div>
+    <div id="tutorial-card" class="tutorial-card glass-card">
+      <div class="tutorial-head">
+        <div class="tutorial-progress" id="tutorial-progress"></div>
+        <button id="tutorial-skip-btn" class="tutorial-skip-btn" title="Tutorial'ı kapat">Atla ✕</button>
+      </div>
+      <h3 id="tutorial-title" class="tutorial-title">Nova Tab'a Hoş Geldin! 👋</h3>
+      <p id="tutorial-desc" class="tutorial-desc"></p>
+      <div class="tutorial-footer">
+        <button id="tutorial-prev-btn" class="glass-btn action-btn-subtle" disabled>← Geri</button>
+        <button id="tutorial-next-btn" class="glass-btn primary-btn">Tur'a Başla</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Scripts -->
+  <script src="js/utils.js"></script>
+  <script src="js/sync-storage.js"></script>
+  <script src="js/interactive-bg.js"></script>
+  <script src="js/weather.js"></script>
+  <script src="js/quotes.js"></script>
+  <script src="js/finance.js"></script>
+  <script src="js/tabs-manager.js"></script>
+  <script src="js/workspaces.js"></script>
+  <script src="js/shortcuts.js"></script>
+  <script src="js/todo.js"></script>
+  <script src="js/notes.js"></script>
+  <script src="js/analytics.js"></script>
+  <script src="js/radar.js"></script>
+  <script src="js/search.js"></script>
+  <script src="js/layout.js"></script>
+  <script src="js/tutorial.js"></script>
+  <script src="js/app.js"></script>
+</body>
+</html>

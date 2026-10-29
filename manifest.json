@@ -1,0 +1,31 @@
+{
+  "manifest_version": 3,
+  "name": "Nova Tab - Modern Akıllı Sekme & Çalışma Alanı",
+  "version": "5.0.0",
+  "description": "Canlı video arka planlar, sekme yöneticisi, çalışma alanları, Google senkronizasyonu, finans takibi ve sürükle-bırak hızlı erişim.",
+  "chrome_url_overrides": {
+    "newtab": "newtab.html"
+  },
+  "permissions": [
+    "storage",
+    "tabs"
+  ],
+  "host_permissions": [
+    "https://api.open-meteo.com/*",
+    "https://geocoding-api.open-meteo.com/*",
+    "https://ipapi.co/*",
+    "https://open.er-api.com/*",
+    "https://api.binance.com/*",
+    "https://api.quotable.io/*",
+    "https://translate.googleapis.com/*",
+    "https://tr.wikipedia.org/*",
+    "https://hacker-news.firebaseio.com/*",
+    "https://api.github.com/*",
+    "https://api.nasa.gov/*"
+  ],
+  "icons": {
+    "16": "icons/icon16.png",
+    "48": "icons/icon48.png",
+    "128": "icons/icon128.png"
+  }
+}
