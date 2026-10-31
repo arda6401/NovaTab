@@ -24,7 +24,27 @@ class LayoutManager {
     this.preEditPositions = null;
     this.hintResetTimer = null;
 
-    // Eski 9-bölge haritası: varsayılan ve migrasyon kaynağı
+    // İçerikle büyüyen widget: sol üst köşe sabit, büyüme sağa/aşağı (quote-widget)
+    this.EDGE_LOCK_WIDGET_ID = 'quote-widget';
+    this.edgeLock = null;
+    this.edgeRO = null;
+
+    // Güvenlik ağı: storage yüksek gecikmeli/askıda kalırsa widget'lar yine görünür olsun
+    setTimeout(() => this.reveal(), 400);
+
+    // Kullanıcının onayladığı varsayılan düzen (birebir {x,y})
+    this.DEFAULT_POSITIONS = {
+      'weather-widget':    { x: 8,    y: 8 },
+      'quote-widget':      { x: 13.7, y: 15.9 },
+      'finance-widget':    { x: 47.4, y: 8 },
+      'clock-block':       { x: 49.2, y: 32.8 },
+      'search-section':    { x: 50,   y: 49 },
+      'shortcuts-section': { x: 50,   y: 65 },
+      'radar-widget':      { x: 11.5, y: 92 },
+      'bottom-actions':    { x: 83.6, y: 92 }
+    };
+
+    // Eski 9-bölge haritası: geçmiş kayıtların migrasyonu için korunur
     this.DEFAULT_ZONE_LAYOUT = {
       'weather-widget':    'top-left',
       'quote-widget':      'top-left',
@@ -36,17 +56,19 @@ class LayoutManager {
       'bottom-actions':    'bot-right',
     };
 
-    // Eski bölge merkezleri (% koordinat olarak)
+    // Eski bölge merkezleri (% koordinat: widget MERKEZİ)
+    // Widget'ların tipik genişliği hesaba katıldı; 1000-1920px genişlikte kenar
+    // taşması olmayacak şekilde ayarlandı (çok sol/sağ çapalı sarkma düzeltildi)
     this.ZONE_ANCHORS = {
-      'top-left':   { x: 12, y: 13 },
+      'top-left':   { x: 20, y: 10 },
       'top-center': { x: 50, y: 13 },
-      'top-right':  { x: 84, y: 12 },
+      'top-right':  { x: 84, y: 9 },
       'mid-left':   { x: 12, y: 50 },
       'mid-center': { x: 50, y: 33 },
       'mid-right':  { x: 88, y: 50 },
-      'bot-left':   { x: 14, y: 85 },
+      'bot-left':   { x: 14, y: 86 },
       'bot-center': { x: 50, y: 85 },
-      'bot-right':  { x: 85, y: 87 }
+      'bot-right':  { x: 79, y: 87 }
     };
     this.STACK_STEP = 16;   // Aynı eski bölgedeki ikinci widget için dikey kayma
     this.CLAMP = { xMin: 6, xMax: 94, yMin: 8, yMax: 92 };
@@ -95,8 +117,7 @@ class LayoutManager {
     }
 
     // Eksik widget'lar varsayılan konumlara tamamlanır
-    const defaults = this.migrateLayout(this.DEFAULT_ZONE_LAYOUT);
-    const finalMap = { ...defaults, ...layout };
+    const finalMap = { ...this.DEFAULT_POSITIONS, ...layout };
 
     this.zonesEl.querySelectorAll('[data-widget]').forEach(widget => {
       const pos = finalMap[widget.id];
@@ -104,6 +125,47 @@ class LayoutManager {
       widget.style.left = `${pos.x}%`;
       widget.style.top = `${pos.y}%`;
     });
+
+    this.setupEdgeLock();
+  }
+
+  /* ── Düzen uygulandı: widget'ları doğru konumlarında açığa çıkar ── */
+  reveal() {
+    if (this.zonesEl) this.zonesEl.classList.add('layout-ready');
+  }
+
+  /* ── İçerikle Büyüyen Widget: Sabit Başlangıç Kenarı ──
+     Widget'lar merkez noktasından konumlanır; kutu büyüdüğünde iki yöne
+     açılır. quote-widget için başlangıç sol üst köşesi kilitlenir:
+     metin uzarsa kutu yalnızca sağa (ve alt satıra) doğru büyür,
+     kısalırsa dengeli biçimde çöker. */
+  setupEdgeLock() {
+    const widget = document.getElementById(this.EDGE_LOCK_WIDGET_ID);
+    if (!widget) return;
+
+    if (this.edgeRO) this.edgeRO.disconnect();
+    this.edgeLock = { w: widget.offsetWidth, h: widget.offsetHeight };
+
+    if (!this.edgeRO) {
+      this.edgeRO = new ResizeObserver(() => this.applyEdgeLock());
+    }
+    this.edgeRO.observe(widget);
+    this.applyEdgeLock();
+  }
+
+  applyEdgeLock() {
+    const widget = document.getElementById(this.EDGE_LOCK_WIDGET_ID);
+    if (!widget || !this.edgeLock) return;
+    // Küçük ekranlarda widget'lar akışta (flex) dizilir; merkez çapası yoktur
+    if (!window.matchMedia('(min-width: 721px)').matches) {
+      widget.style.transform = '';
+      return;
+    }
+    // left/top % + translate(-50%,-50%) çapasını koru; sadece boyut farkının
+    // yarısını piksel ofsetiyle telafi et → sol üst köşe sabit kalır
+    const dx = (widget.offsetWidth - this.edgeLock.w) / 2;
+    const dy = (widget.offsetHeight - this.edgeLock.h) / 2;
+    widget.style.transform = `translate(calc(-50% + ${dx}px), calc(-50% + ${dy}px))`;
   }
 
   /* ── Düzenleme Modu Giriş / Çıkış ── */
@@ -195,8 +257,7 @@ class LayoutManager {
   }
 
   resetLiveLayout() {
-    const defaults = this.migrateLayout(this.DEFAULT_ZONE_LAYOUT);
-    this.applyLayout(defaults);
+    this.applyLayout(this.DEFAULT_POSITIONS);
   }
 
   /* ── Vazgeç: kaydedilmiş konumlara birebir dön ── */

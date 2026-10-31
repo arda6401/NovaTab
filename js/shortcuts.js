@@ -26,6 +26,14 @@ class ShortcutManager {
     this.closeBtn = document.getElementById('shortcut-close-btn');
     this.cancelBtn = document.getElementById('shortcut-cancel-btn');
 
+    // localStorage aynasından senkron ön-baskı: kısayol bölümü ilk boyamada
+    // asıl boyutunda olsun (async storage sonradan gelip genişleme kayması yapmasın)
+    try {
+      const cachedShortcuts = localStorage.getItem(this.storageKey);
+      if (cachedShortcuts) this.shortcuts = JSON.parse(cachedShortcuts);
+    } catch (e) {}
+    if (Array.isArray(this.shortcuts) && this.shortcuts.length) this.render();
+
     this.init();
   }
 

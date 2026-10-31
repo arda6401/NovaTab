@@ -231,16 +231,21 @@ class QuoteManager {
   renderQuote(text, author) {
     if (!this.textEl) return;
 
-    this.textEl.style.transition = 'opacity 0.2s ease';
-    this.textEl.style.opacity = '0';
-
-    setTimeout(() => {
+    const apply = () => {
       this.textEl.textContent = `"${text}"`;
       if (this.authorEl) {
         this.authorEl.textContent = `— ${author}`;
       }
+      // Metin genişliği değişti → yerleşim telafisini AYNI karede uygula ki
+      // kart bir kare boyunca kaymasın (RO asenkroneleri geriden gelir)
+      window.novaApp?.layoutManager?.applyEdgeLock?.();
       this.textEl.style.opacity = '1';
-    }, 180);
+    };
+
+    this.textEl.style.transition = 'opacity 0.2s ease';
+    this.textEl.style.opacity = '0';
+
+    setTimeout(apply, 180);
   }
 }
 

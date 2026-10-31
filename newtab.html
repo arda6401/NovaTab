@@ -54,7 +54,7 @@
     <!-- Zone: top-left -->
     <div class="zone" data-zone="top-left" data-zone-label="Sol Üst">
       <!-- Weather Widget -->
-      <div id="weather-widget" class="glass-card weather-card" data-widget="weather-widget">
+      <div id="weather-widget" class="glass-card weather-card" data-widget="weather-widget" style="left: 8%; top: 8%;">
         <div class="weather-icon" id="weather-icon">
           <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="4"/><path d="M12 2v2"/><path d="M12 20v2"/><path d="m4.93 4.93 1.41 1.41"/><path d="m17.66 17.66 1.41 1.41"/><path d="M2 12h2"/><path d="M20 12h2"/><path d="m6.34 17.66-1.41 1.41"/><path d="m19.07 4.93-1.41 1.41"/></svg>
         </div>
@@ -65,7 +65,7 @@
       </div>
 
       <!-- Daily Quote -->
-      <div id="quote-widget" class="glass-card top-quote-card" data-widget="quote-widget">
+      <div id="quote-widget" class="glass-card top-quote-card" data-widget="quote-widget" style="left: 13.7%; top: 15.9%;">
         <p id="quote-text" class="quote-text">"Geleceği tahmin etmenin en iyi yolu, onu inşa etmektir."</p>
         <div class="quote-footer">
           <span id="quote-author" class="quote-author">— Alan Kay</span>
@@ -82,7 +82,7 @@
     <!-- Zone: top-right -->
     <div class="zone" data-zone="top-right" data-zone-label="Sağ Üst">
       <!-- Finance Ticker Widget -->
-      <div id="finance-widget" class="glass-card finance-card" data-widget="finance-widget">
+      <div id="finance-widget" class="glass-card finance-card" data-widget="finance-widget" style="left: 47.4%; top: 8%;">
         <div id="finance-ticker" class="finance-ticker">
           <!-- Populated via finance.js -->
         </div>
@@ -95,14 +95,14 @@
     <!-- Zone: mid-center -->
     <div class="zone" data-zone="mid-center" data-zone-label="Merkez">
       <!-- Clock Block -->
-      <div id="clock-block" class="clock-section" data-widget="clock-block">
+      <div id="clock-block" class="clock-section" data-widget="clock-block" style="left: 49.2%; top: 32.8%;">
         <div id="clock" class="digital-clock">00:00</div>
         <div id="date-display" class="date-display">10 Eylül 2026, Perşembe</div>
         <div id="greeting" class="greeting-text">İyi günler</div>
       </div>
 
       <!-- Search Bar -->
-      <div id="search-section" class="search-section" data-widget="search-section">
+      <div id="search-section" class="search-section" data-widget="search-section" style="left: 50%; top: 49%;">
         <div class="search-engines" id="search-engines">
           <button class="engine-pill active" data-engine="google"><span class="engine-icon">G</span> Google</button>
           <button class="engine-pill" data-engine="chatgpt"><span class="engine-icon">✦</span> ChatGPT</button>
@@ -123,7 +123,7 @@
       </div>
 
       <!-- Shortcuts -->
-      <div id="shortcuts-section" class="shortcuts-section" data-widget="shortcuts-section">
+      <div id="shortcuts-section" class="shortcuts-section" data-widget="shortcuts-section" style="left: 50%; top: 65%;">
         <div class="shortcuts-grid" id="shortcuts-grid">
           <!-- Populated and draggable via shortcuts.js -->
         </div>
@@ -136,7 +136,7 @@
     <!-- Zone: bot-left -->
     <div class="zone" data-zone="bot-left" data-zone-label="Sol Alt">
       <!-- Radar Widget -->
-      <div id="radar-widget" class="glass-card radar-pill" data-widget="radar-widget" role="button" tabindex="0" title="Günün Canlı Radarı — Detaylar için tıkla">
+      <div id="radar-widget" class="glass-card radar-pill" data-widget="radar-widget" style="left: 11.5%; top: 92%;" role="button" tabindex="0" title="Günün Canlı Radarı — Detaylar için tıkla">
         <div class="radar-icon-wrap">
           <span class="radar-ping-ring"></span>
           <span class="radar-live-dot"></span>
@@ -162,7 +162,7 @@
     <!-- Zone: bot-right -->
     <div class="zone" data-zone="bot-right" data-zone-label="Sağ Alt">
       <!-- Action Buttons Group -->
-      <div id="bottom-actions" class="bottom-actions" data-widget="bottom-actions">
+      <div id="bottom-actions" class="bottom-actions" data-widget="bottom-actions" style="left: 83.6%; top: 92%;">
         <button id="analytics-toggle-btn" class="glass-btn action-btn" title="Gizlilik Odaklı Ekran Süresi &amp; İstatistikler">
           <svg viewBox="0 0 24 24" width="17" height="17" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
           <span>İstatistikler</span>

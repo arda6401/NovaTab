@@ -103,43 +103,65 @@ class NovaApp {
   }
 
   async init() {
-    await this.loadSettings();
+    // 1) SENKRON yükleme: sync-storage her yazımda localStorage aynasını güncellediği
+    //    için bu okuma 0ms sürer ve ilk boyamadan önce tamamlanır.
+    this.migrateSavedSettings(this.readCachedSettings());
+    // 2) Düzen hemen uygulanır → widget'lar DOĞRU yerlerde, hiç zıplamadan başlar
     if (this.layoutManager) {
       this.layoutManager.applyLayout(this.settings.layout);
+    } else {
+      // LayoutManager yoksa da widget'lar kilitle kalmamalı
+      document.getElementById('layout-zones')?.classList.add('layout-ready');
     }
     this.applySettings();
     this.startClock();
     this.startPreviewClock();
     this.bindEvents();
+    // 3) Arka plan senkronizasyonu: başka makineden güncelleme gelirse sessizce uygula
+    this.refreshFromCloud();
   }
 
-  async loadSettings() {
-    if (window.syncStorage) {
-      const saved = await window.syncStorage.get(this.settingsKey, null);
-      if (saved) {
-        this.settings = {
-          ...this.settings,
-          ...saved,
-          bgAdjust: { ...this.settings.bgAdjust, ...(saved.bgAdjust || {}) },
-          widgets: { ...this.settings.widgets, ...(saved.widgets || {}) },
-          layout: { ...this.settings.layout, ...(saved.layout || {}) }
-        };
-      }
-    } else {
-      try {
-        const saved = localStorage.getItem(this.settingsKey);
-        if (saved) {
-          const parsed = JSON.parse(saved);
-          this.settings = {
-            ...this.settings,
-            ...parsed,
-            bgAdjust: { ...this.settings.bgAdjust, ...(parsed.bgAdjust || {}) },
-            widgets: { ...this.settings.widgets, ...(parsed.widgets || {}) },
-            layout: { ...this.settings.layout, ...(parsed.layout || {}) }
-          };
-        }
-      } catch (e) {}
+  /* localStorage aynasından senkron okuma — storage API'si beklemez */
+  readCachedSettings() {
+    try {
+      const raw = localStorage.getItem(this.settingsKey);
+      return raw ? JSON.parse(raw) : null;
+    } catch (e) {
+      return null;
     }
+  }
+
+  migrateSavedSettings(saved) {
+    if (!saved) return;
+    this.settings = {
+      ...this.settings,
+      ...saved,
+      bgAdjust: { ...this.settings.bgAdjust, ...(saved.bgAdjust || {}) },
+      widgets: { ...this.settings.widgets, ...(saved.widgets || {}) },
+      layout: { ...this.settings.layout, ...(saved.layout || {}) }
+    };
+  }
+
+  /*chrome.storage.sync'ten gelen kopyayı arka planda kontrol et: başka bir makinede
+    kaydedilmiş güncelleme varsa, değişen kadarıyla sessizce uygula (zekâsız reflow önlenir) */
+  async refreshFromCloud() {
+    if (!window.syncStorage) return;
+    const cached = this.readCachedSettings();
+    const saved = await window.syncStorage.get(this.settingsKey, null);
+    if (!saved) return;
+    // Sync verisi local aynayla aynıysa (en yaygın durum) hiçbir şeye dokunma
+    if (cached && JSON.stringify(saved) === JSON.stringify(cached)) return;
+    const before = JSON.stringify(this.settings);
+    this.migrateSavedSettings(saved);
+    if (JSON.stringify(this.settings) === before) return;
+    // Aynayı kendi kendine iyileştir: bir sonraki sekme açılışı 0ms'de doğru başlasın
+    try {
+      localStorage.setItem(this.settingsKey, JSON.stringify(this.settings));
+    } catch (e) {}
+    if (this.layoutManager) {
+      this.layoutManager.applyLayout(this.settings.layout);
+    }
+    this.applySettings();
   }
 
   async saveSettings() {

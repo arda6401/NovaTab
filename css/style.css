@@ -339,6 +339,9 @@ body.theme-minimal-dark {
   padding: 8px 14px;
   border-radius: var(--radius-md);
   cursor: pointer;
+  /* Veri yüklenirken/sabitken genişlik değişimini sınırla → merkez çapasında kayma olmasın */
+  min-width: 168px;
+  justify-content: center;
 }
 
 .weather-icon {
@@ -364,7 +367,8 @@ body.theme-minimal-dark {
   text-transform: capitalize;
 }
 
-/* Top-Left Daily Quote Card */
+/* Top-Left Daily Quote Card — içeriğe göre boyutlanır; LayoutManager sol üst
+   köşeyi sabit tutup büyümeyi sağa/yukarı-yapı doğru yapar */
 .top-quote-card {
   display: flex;
   flex-direction: column;
@@ -389,12 +393,17 @@ body.theme-minimal-dark {
   display: flex;
   justify-content: space-between;
   align-items: center;
+  gap: 8px;
   margin-top: 4px;
+  min-width: 0;
 }
 
 .top-quote-card .quote-author {
   font-size: 10.5px;
   color: var(--text-muted);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 /* Finance Ticker Widget */
@@ -583,16 +592,20 @@ body.theme-minimal-dark {
 }
 
 /* Speed Dial Shortcuts with Drag & Drop */
+/* Widget genişliği içeriğe göre: kaç link varsa kutu o kadar genişler,
+   boş alana yayılmaz (LayoutManager merkez noktasında ortalar).
+   width:max-content gerekli — yoksa absolute konumda "available" alan
+   (left% → sağ kenar boşluğu) ile erken satır kırılır */
 .shortcuts-section {
-  width: 100%;
+  width: max-content;
   max-width: 840px;
 }
 
 .shortcuts-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(95px, 1fr));
-  gap: 16px;
+  display: flex;
+  flex-wrap: wrap;
   justify-content: center;
+  gap: 16px;
 }
 
 .shortcut-item {
@@ -601,7 +614,9 @@ body.theme-minimal-dark {
   flex-direction: column;
   align-items: center;
   gap: 8px;
-  padding: 12px 8px;
+  width: 95px;
+  box-sizing: border-box;
+  padding: 12px 6px;
   border-radius: var(--radius-md);
   cursor: grab;
   transition: all var(--transition-fast);
@@ -2603,19 +2618,19 @@ body.layout-edit-active .layout-edit-toolbar {
 }
 
 body:not([data-motion="zen"]) .zone > * {
-  animation: novaIntroFadeUp 0.6s cubic-bezier(0.16, 1, 0.3, 1) backwards;
+  animation: novaIntroFadeUp 0.25s cubic-bezier(0.16, 1, 0.3, 1) backwards;
 }
 
 body:not([data-motion="zen"]) .zone[data-zone^="top"] > * {
-  animation-delay: 0.05s;
+  animation-delay: 0s;
 }
 
 body:not([data-motion="zen"]) .zone[data-zone^="mid"] > * {
-  animation-delay: 0.12s;
+  animation-delay: 0.03s;
 }
 
 body:not([data-motion="zen"]) .zone[data-zone^="bot"] > * {
-  animation-delay: 0.20s;
+  animation-delay: 0.06s;
 }
 
 
