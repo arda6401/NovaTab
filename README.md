@@ -50,7 +50,7 @@
 
 1. Bu deponun içeriğini indirin veya klonlayın:
    ```bash
-   git clone https://github.com/kullanici/novatab.git
+   git clone https://github.com/arda6401/novatab.git
    ```
 2. Chrome'da → **chrome://extensions** adresine gidin
 3. Sağ üstten **Geliştirici modu**'nu açın
