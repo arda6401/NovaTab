@@ -24,6 +24,7 @@ class NovaApp {
       glass: 'medium',
       motion: 'fluid',
       radius: 'medium',
+      uiScale: 100,
       customBg: '',
       bgAdjust: {
         blur: 0,
@@ -80,6 +81,10 @@ class NovaApp {
     this.valBgShiftX = document.getElementById('val-bg-shift-x');
     this.valBgShiftY = document.getElementById('val-bg-shift-y');
     this.bgAdjustResetBtn = document.getElementById('bg-adjust-reset');
+
+    // v5.7 Arayüz Ölçeği (UI Scale)
+    this.sliderUiScale = document.getElementById('setting-ui-scale');
+    this.valUiScale = document.getElementById('val-ui-scale');
 
     // v4.5 Preview Elements
     this.previewLayer = document.getElementById('bg-preview-layer');
@@ -573,9 +578,18 @@ class NovaApp {
     }
   }
 
+  /* Arayüz Ölçeği: --ui-scale CSS değişkenini günceller (zoom ile uygulanır).
+     Sınırlar slider aralığıyla aynıdır (50–150). */
+  applyUIScale() {
+    const scale = Math.min(150, Math.max(50, parseInt(this.settings.uiScale, 10) || 100));
+    document.documentElement.style.setProperty('--ui-scale', String(scale / 100));
+    if (this.valUiScale) this.valUiScale.textContent = `${scale}%`;
+  }
+
   applySettings() {
     this.applyBackground();
     this.applyDesignAndMotion();
+    this.applyUIScale();
 
     // Widget Visibility
     const ids = {
@@ -711,6 +725,11 @@ class NovaApp {
     if (this.sliderBgShiftY) this.sliderBgShiftY.value = adj.shiftY || 0;
     if (this.valBgShiftY) this.valBgShiftY.textContent = `${adj.shiftY || 0}%`;
 
+    // v5.7 Arayüz Ölçeği
+    const uiScaleVal = Math.min(150, Math.max(50, parseInt(this.settings.uiScale, 10) || 100));
+    if (this.sliderUiScale) this.sliderUiScale.value = uiScaleVal;
+    if (this.valUiScale) this.valUiScale.textContent = `${uiScaleVal}%`;
+
     // Theme preset active state
     document.querySelectorAll('.preset-btn').forEach(btn => {
       if (btn.dataset.theme === this.settings.theme && !this.settings.customBg) {
@@ -796,8 +815,14 @@ class NovaApp {
       shiftY: this.sliderBgShiftY ? parseInt(this.sliderBgShiftY.value, 10) || 0 : 0
     };
 
+    // v5.7 Arayüz Ölçeği
+    if (this.sliderUiScale) {
+      this.settings.uiScale = parseInt(this.sliderUiScale.value, 10) || 100;
+    }
+
     // Apply immediate transform
     this.applyBackgroundTransforms();
+    this.applyUIScale();
 
     this.saveSettings();
     this.closeSettingsModal();
@@ -933,6 +958,16 @@ class NovaApp {
         slider.addEventListener('change', () => this.saveSettings());
       }
     });
+
+    // v5.7 Arayüz Ölçeği — canlı önizleme ve kalıcılık
+    if (this.sliderUiScale) {
+      this.sliderUiScale.addEventListener('input', () => {
+        const v = Math.min(150, Math.max(50, parseInt(this.sliderUiScale.value, 10) || 100));
+        this.settings.uiScale = v;
+        this.applyUIScale();
+      });
+      this.sliderUiScale.addEventListener('change', () => this.saveSettings());
+    }
 
     // Reset Background Adjustments
     if (this.bgAdjustResetBtn) {

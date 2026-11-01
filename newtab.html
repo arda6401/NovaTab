@@ -606,6 +606,21 @@
           </div>
         </div>
 
+        <!-- UI Scale: Widget / Nesne Büyüklüğü -->
+        <div class="setting-item">
+          <label>🔎 Arayüz Ölçeği (Nesne Büyüklüğü):</label>
+          <div class="bg-controls-grid">
+            <div class="bg-control-row">
+              <div class="bg-control-label">
+                <span>Bileşenlerin boyutu:</span>
+                <span id="val-ui-scale">100%</span>
+              </div>
+              <input type="range" id="setting-ui-scale" min="50" max="150" step="5" value="100">
+            </div>
+          </div>
+          <p class="setting-hint">💡 Widget'lar, saat, arama çubuğu ve alt düğmeler birlikte büyür/küçülür; konumları korunur. Değişiklik anında önizlenir.</p>
+        </div>
+
         <!-- Widget Visibility (All Optional!) -->
         <div class="setting-item">
           <label>Görünür Bileşenler (Opsiyonel):</label>
@@ -734,7 +749,7 @@
   <div id="layout-edit-toolbar" class="layout-edit-toolbar">
     <span class="layout-edit-hint">
       <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m14.5 17.5 3-3 3 3"/><path d="m17.5 14.5 0 6"/><path d="m3 12.5 5.5-5.5 3.5 3.5"/><path d="M5 3H3v2"/><path d="M15 3h2v2"/><path d="M9 21h2a2 2 0 0 0 2-2"/></svg>
-      <span>Widget'ları ekranda serbestçe sürükle</span>
+      <span>Widget'ları sürükle — kenarlar/merkez hizalanınca mor çizgi kılavuz olur</span>
     </span>
     <div class="layout-edit-actions">
       <button type="button" id="layout-edit-reset-btn" class="glass-btn action-btn-subtle">↺ Sıfırla</button>

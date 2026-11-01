@@ -4,6 +4,8 @@
  *  - Her widget yüzde bazlı {x, y} merkezi koordinatıyla ekranda hareket eder
  *  - Eski 9-bölge kayıtları otomatik olarak % koordinata çevrilir (migrasyon)
  *  - Edit modunda widget'lar serbestçe sürüklenir; çakışan bırakma geri alınır ve uyarı gösterilir
+ *  - Sürüklerken hizalama kılavuz çizgileri (snap guides): ekran merkezi ve diğer
+ *    widget'ların kenar/merkez çizgilerine ~12px içinde yapışır (v5.7)
  *  - "Kaydet" kalıcı, "Vazgeç"/Escape geri alır
  */
 
@@ -73,6 +75,7 @@ class LayoutManager {
     this.STACK_STEP = 16;   // Aynı eski bölgedeki ikinci widget için dikey kayma
     this.CLAMP = { xMin: 6, xMax: 94, yMin: 8, yMax: 92 };
     this.OVERLAP_TOLERANCE = 8; // px — bu kadarlıktan az örtüşme "değiniyor" sayılır
+    this.SNAP_THRESHOLD = 12;   // px — bu kadar yakınsa hizalama çizgisine yapışır
 
     this.HINT_DEFAULT = this.hintEl ? this.hintEl.textContent : '';
 
@@ -197,6 +200,7 @@ class LayoutManager {
 
     this.zonesEl.classList.add('edit-mode');
     document.body.classList.add('layout-edit-active');
+    this.createSnapGuides();
 
     // Edit modda widget tıklamalarını (radar modalı vb.) blokla
     this._onEditClick = (e) => e.stopImmediatePropagation();
@@ -218,6 +222,7 @@ class LayoutManager {
 
     this.zonesEl.classList.remove('edit-mode');
     document.body.classList.remove('layout-edit-active');
+    this.removeSnapGuides();
     document.removeEventListener('keydown', this._onKeydown);
     if (this._onEditClick) {
       this.zonesEl.removeEventListener('click', this._onEditClick, true);
@@ -293,11 +298,14 @@ class LayoutManager {
       pointerId: e.pointerId,
       offX,
       offY,
+      halfW: widgetRect.width / 2,
+      halfH: widgetRect.height / 2,
       startPos: { x: centerX, y: centerY }
     };
 
     try { widget.setPointerCapture(e.pointerId); } catch (err) {}
     widget.classList.add('widget-dragging');
+    this.hideSnapGuides();
     this.resetHint();
   }
 
@@ -308,10 +316,19 @@ class LayoutManager {
 
     const x = ((e.clientX - contRect.left) / contRect.width * 100) - this.activeDrag.offX;
     const y = ((e.clientY - contRect.top) / contRect.height * 100) - this.activeDrag.offY;
-    const clamped = this.clampPos(x, y);
+    let pos = this.clampPos(x, y);
 
-    widget.style.left = `${clamped.x}%`;
-    widget.style.top = `${clamped.y}%`;
+    // Hızalama (snap): yakın kenar/merkez çizgisine yapıştır, kılavuzları göster
+    pos = this.applySnap(pos);
+    pos = this.clampPos(pos.x, pos.y);
+    if (pos.lineV !== null || pos.lineH !== null) {
+      this.showSnapGuides(pos.lineV, pos.lineH);
+    } else {
+      this.hideSnapGuides();
+    }
+
+    widget.style.left = `${pos.x}%`;
+    widget.style.top = `${pos.y}%`;
     e.preventDefault();
   }
 
@@ -322,6 +339,7 @@ class LayoutManager {
 
     try { drag.widget.releasePointerCapture(drag.pointerId); } catch (err) {}
     drag.widget.classList.remove('widget-dragging');
+    this.hideSnapGuides();
 
     if (!shouldPlace) return;
 
@@ -333,6 +351,95 @@ class LayoutManager {
       this.flashCollision(drag.widget);
       this.warnHint();
     }
+  }
+
+  /* ── Hızalama (Snap) Kılavuzları ──
+     Dikey/yatay aday çizgiler: ekranın merkezi + diğer widget'ların
+     sol/orta/sağ (üst/orta/alt) kenarları. Sürüklendiren widget'ın sol/merkez/sağ
+     (üst/merkez/alt) ağızlarından biri SNAP_THRESHOLD içinde bir çizgiye denk
+     gelirse konum yapıştırılır ve çizgi px (görsel) koordinatla döndürülür. */
+  applySnap(pos) {
+    const result = { x: pos.x, y: pos.y, lineV: null, lineH: null };
+    const drag = this.activeDrag;
+    if (!drag || !this.snapGuides || !this.zonesEl) return result;
+
+    const contRect = this.zonesEl.getBoundingClientRect();
+    const curCx = contRect.left + (pos.x / 100) * contRect.width;
+    const curCy = contRect.top + (pos.y / 100) * contRect.height;
+
+    const vLines = [contRect.left + contRect.width / 2];
+    const hLines = [contRect.top + contRect.height / 2];
+
+    this.zonesEl.querySelectorAll('[data-widget]').forEach(other => {
+      if (other === drag.widget || other.style.display === 'none') return;
+      const r = other.getBoundingClientRect();
+      vLines.push(r.left, r.left + r.width / 2, r.right);
+      hLines.push(r.top, r.top + r.height / 2, r.bottom);
+    });
+
+    const thr = this.SNAP_THRESHOLD;
+    let bestV = null, bestH = null;
+    for (const line of vLines) {
+      for (const cand of [line + drag.halfW, line, line - drag.halfW]) {
+        const candPct = (cand - contRect.left) / contRect.width * 100;
+        if (candPct < this.CLAMP.xMin - 0.05 || candPct > this.CLAMP.xMax + 0.05) continue;
+        const d = Math.abs(cand - curCx);
+        if (d <= thr && (!bestV || d < bestV.d)) bestV = { d, cx: cand, line };
+      }
+    }
+    for (const line of hLines) {
+      for (const cand of [line + drag.halfH, line, line - drag.halfH]) {
+        const candPct = (cand - contRect.top) / contRect.height * 100;
+        if (candPct < this.CLAMP.yMin - 0.05 || candPct > this.CLAMP.yMax + 0.05) continue;
+        const d = Math.abs(cand - curCy);
+        if (d <= thr && (!bestH || d < bestH.d)) bestH = { d, cy: cand, line };
+      }
+    }
+
+    if (bestV) {
+      result.x = (bestV.cx - contRect.left) / contRect.width * 100;
+      result.lineV = bestV.line;
+    }
+    if (bestH) {
+      result.y = (bestH.cy - contRect.top) / contRect.height * 100;
+      result.lineH = bestH.line;
+    }
+    return result;
+  }
+
+  createSnapGuides() {
+    if (!document || this.snapGuides) return;
+    const mk = (cls) => {
+      const el = document.createElement('div');
+      el.className = `snap-guide ${cls}`;
+      document.body.appendChild(el);
+      return el;
+    };
+    this.snapGuides = { v: mk('snap-v'), h: mk('snap-h') };
+  }
+
+  removeSnapGuides() {
+    if (!this.snapGuides) return;
+    this.snapGuides.v.remove();
+    this.snapGuides.h.remove();
+    this.snapGuides = null;
+  }
+
+  showSnapGuides(lineV, lineH) {
+    if (!this.snapGuides) return;
+    const setLine = (el, prop, val) => {
+      if (!el) return;
+      if (val !== null && val !== undefined) el.style[prop] = `${val}px`;
+      el.classList.toggle('visible', val !== null && val !== undefined);
+    };
+    setLine(this.snapGuides.v, 'left', lineV);
+    setLine(this.snapGuides.h, 'top', lineH);
+  }
+
+  hideSnapGuides() {
+    if (!this.snapGuides) return;
+    this.snapGuides.v?.classList.remove('visible');
+    this.snapGuides.h?.classList.remove('visible');
   }
 
   /* Widget'ın bulunduğu düzlemde başka bir widget'la çakışıyor mu? */

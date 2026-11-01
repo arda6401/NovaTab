@@ -39,6 +39,7 @@
 ### 🔧 Ayarlar & Senkronizasyon
 - **Google Senkronizasyonu** — Ayarlar, notlar, görevler ve çalışma alanları `chrome.storage.sync` ile tüm cihazlarda eşitlenir (kota aşımında otomatik local yedekleme)
 - **9-Bölgeli Serbest Düzen** — Widget'ları sürükleyip istediğiniz bölgeye yerleştirin; düzeniniz kaydedilir
+- **Arayüz Ölçeği** — Widget'ların, saatin ve düğmelerin büyüklüğünü %50–150 arasında ayarlayın; konumlar korunur ve tüm cihazlarda senkronize edilir
 - **Çoklu Arama Motoru** — Google, ChatGPT, Perplexity, YouTube ve GitHub arasında tek tuşla geçiş
 - **Hoş Geldiniz Turu** — İlk açılışta interaktif tanıtım
 

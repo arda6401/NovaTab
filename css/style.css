@@ -2349,6 +2349,13 @@ body.theme-interactive {
   box-sizing: border-box;
 }
 
+/* UI Ölçeği (v5.7): widget'lar ile üst kontrol düğmeleri birlikte ölçeklenir.
+   zoom, mutlak % konumları korurken px boyutlarını ölçekler. */
+#layout-zones,
+.chrome-controls {
+  zoom: var(--ui-scale, 1);
+}
+
 /* Zone sarmalayıcıları kutu üretmez: widget'lar tam ekran overlay'e gore konumlanir */
 .zone {
   display: contents;
@@ -2412,6 +2419,37 @@ body.layout-edit-active {
     0 0,
     50% 50%,
     50% 50%;
+}
+
+/* Hızalama (Snap) Kılavuz Çizgileri — sürükleme sırasında ekrana gelir.
+   Çizgiler body'ye eklenir (zoom'dan etkilenmez), px tabanlı görsel konumla hizalanır. */
+.snap-guide {
+  position: fixed;
+  z-index: 400;
+  background: var(--accent-purple, #8b5cf6);
+  box-shadow: 0 0 10px 1px var(--accent-purple, #8b5cf6);
+  border-radius: 2px;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.12s ease;
+}
+
+.snap-guide.visible {
+  opacity: 0.9;
+}
+
+.snap-guide.snap-v {
+  top: 0;
+  bottom: 0;
+  width: 2px;
+  margin-left: -1px;
+}
+
+.snap-guide.snap-h {
+  left: 0;
+  right: 0;
+  height: 2px;
+  margin-top: -1px;
 }
 
 /* Widget'lar serbestçe sürüklenir */
