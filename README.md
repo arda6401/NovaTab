@@ -2,6 +2,11 @@
 
 # 🌌 Nova Tab
 
+
+
+![Nova Tab Demo GIF](docs/demo.gif)
+
+
 ### Modern Akıllı Sekme & Çalışma Alanı
 
 **Chrome için yeni nesil Yeni Sekme sayfası** — sıkıcı varsayılan sekmeyi; canlı video arka planlar, sürükle-bırak düzen, çalışma alanları, Google senkronizasyonu, finans takibi ve daha fazlasıyla dolu akıllı bir panoya dönüştürür.
@@ -34,39 +39,34 @@ Her yeni sekme açtığınızda karşınıza gelen boş sayfayı hiç düşünd�
 
 ---
 
-## 🎬 Canlı Demo
-
-<div align="center">
-
-![Nova Tab Demo GIF](docs/demo.gif)
-
-</div>
-
----
 
 ## ✨ Özellikler
 
 ### 🎨 Arka Plan & Görünüm
+
 - **Canlı video temalar** — Lo-Fi, yağmur ve siberpunk videoları döngüsel olarak oynatılır
 - **İnteraktif tuval** — İmlecinize tepki veren sıvı/parçacık canvas katmanı
 - **Dinamik gradientler & glassmorphism** — Birden fazla tema paleti, cam efekti ve köşe yumuşatma ayarı
 - **Duvar kağıdı** — Kendi görselinizi yükleyin veya Pinterest bağlantısı kullanın; bulanıklık, yakınlaştırma, döndürme ve kaydırma gibi ince ayarları yapın
 
 ### 📊 Canlı Widget'lar
-| Widget | Açıklama |
-|---|---|
-| 🌦️ **Hava Durumu** | Open-Meteo ile otomatik konum veya seçilen şehir |
-| 💱 **Finans Ticker** | USD/TRY, EUR/TRY, BTC ve ETH — her 15 dakikada yenilenir |
-| 🧭 **Günün Radarı** | Hacker News, GitHub Trending, Vikipedi "Tarihte Bugün" ve NASA APOD — otomatik Türkçe çeviri ile |
-| 💬 **Günlük Söz** | Quotable API'den ilham verici sözler |
+
+| Widget               | Açıklama                                                                                         |
+| -------------------- | ------------------------------------------------------------------------------------------------ |
+| 🌦️ **Hava Durumu**   | Open-Meteo ile otomatik konum veya seçilen şehir                                                 |
+| 💱 **Finans Ticker** | USD/TRY, EUR/TRY, BTC ve ETH — her 15 dakikada yenilenir                                         |
+| 🧭 **Günün Radarı**  | Hacker News, GitHub Trending, Vikipedi "Tarihte Bugün" ve NASA APOD — otomatik Türkçe çeviri ile |
+| 💬 **Günlük Söz**    | Quotable API'den ilham verici sözler                                                             |
 
 ### 🗂️ Üretkenlik
+
 - **📋 Sekme Yöneticisi** — Tüm açık sekmeleri tek panelden görüntüleyin ve arayın
 - **🗄️ Çalışma Alanları** — Projelere göre gruplandırılmış kısayol ve widget kümeleri
 - **✅ Yapılacaklar & 📝 Notlar** — Dahili hızlı not defteri ve görev listesi
 - **🚀 Sürükle-Bırak Kısayollar** — En sevdiğiniz siteler tek dokunuş uzağınızda
 
 ### 🔧 Ayarlar & Senkronizasyon
+
 - **Google Senkronizasyonu** — Ayarlar, notlar, görevler ve çalışma alanları `chrome.storage.sync` ile tüm cihazlarda eşitlenir (kota aşımında otomatik local yedekleme)
 - **9-Bölgeli Serbest Düzen** — Widget'ları sürükleyip istediğiniz bölgeye yerleştirin; düzeniniz kaydedilir
 - **Arayüz Ölçeği** — Widget'ların, saatin ve düğmelerin büyüklüğünü %50–150 arasında ayarlayın; konumlar korunur ve tüm cihazlarda senkronize edilir
@@ -96,17 +96,17 @@ Her yeni sekme açtığınızda karşınıza gelen boş sayfayı hiç düşünd�
 
 Nova Tab yalnızca ücretsiz ve API anahtarı gerektirmeyen açık servisleri kullanır:
 
-| Servis | Kullanım |
-|---|---|
-| [Open-Meteo](https://open-meteo.com) | Hava durumu & geokodlama |
-| [Open Exchange Rates (open.er-api.com)](https://open.er-api.com) | Döviz kurları |
-| [Binance API](https://api.binance.com) | BTC / ETH kurları |
-| [Quotable](https://api.quotable.io) | Günlük sözler |
-| [Hacker News](https://hacker-news.firebaseio.com) | Günün radarı |
-| [GitHub API](https://api.github.com) | Trend repository'ler |
-| [TR Wikipedia](https://tr.wikipedia.org) | Tarihte bugün |
-| [NASA APOD](https://api.nasa.gov) | Günün astronomi fotoğrafı |
-| [Mixkit](https://assets.mixkit.co) | Canlı video temalar |
+| Servis                                                           | Kullanım                  |
+| ---------------------------------------------------------------- | ------------------------- |
+| [Open-Meteo](https://open-meteo.com)                             | Hava durumu & geokodlama  |
+| [Open Exchange Rates (open.er-api.com)](https://open.er-api.com) | Döviz kurları             |
+| [Binance API](https://api.binance.com)                           | BTC / ETH kurları         |
+| [Quotable](https://api.quotable.io)                              | Günlük sözler             |
+| [Hacker News](https://hacker-news.firebaseio.com)                | Günün radarı              |
+| [GitHub API](https://api.github.com)                             | Trend repository'ler      |
+| [TR Wikipedia](https://tr.wikipedia.org)                         | Tarihte bugün             |
+| [NASA APOD](https://api.nasa.gov)                                | Günün astronomi fotoğrafı |
+| [Mixkit](https://assets.mixkit.co)                               | Canlı video temalar       |
 
 ---
 
@@ -146,11 +146,11 @@ NovaTab/
 
 ## 🔐 İzinler
 
-| İzin | Amaç |
-|---|---|
-| `storage` | Ayarları, notları ve çalışma alanlarını kaydetmek |
-| `tabs` | Sekme yöneticisinin açık sekmeleri listelemesi |
-| Host izinleri | Yukarıda listelenen ücretsiz API'lere bağlanmak |
+| İzin          | Amaç                                              |
+| ------------- | ------------------------------------------------- |
+| `storage`     | Ayarları, notları ve çalışma alanlarını kaydetmek |
+| `tabs`        | Sekme yöneticisinin açık sekmeleri listelemesi    |
+| Host izinleri | Yukarıda listelenen ücretsiz API'lere bağlanmak   |
 
 Kod herkese açıktır — hiçbir telemetri veya veri toplama yapılmaz.
 
