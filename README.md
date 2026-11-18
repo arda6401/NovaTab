@@ -4,11 +4,41 @@
 
 ### Modern Akıllı Sekme & Çalışma Alanı
 
-**Chrome için yeni nesil Yeni Sekme sayfası** — Canlı video arka planlar, sürükle-bırak düzen, çalışma alanları, Google senkronizasyonu, finans takibi ve daha fazlası.
+**Chrome için yeni nesil Yeni Sekme sayfası** — sıkıcı varsayılan sekmeyi; canlı video arka planlar, sürükle-bırak düzen, çalışma alanları, Google senkronizasyonu, finans takibi ve daha fazlasıyla dolu akıllı bir panoya dönüştürür.
 
 `Manifest V3` · `Google Sync` · `Sıfır Bağımlılık` · `v5.0.0`
 
-![Nova Tab Ekran Görüntüsü](docs/screenshot.jpg)
+</div>
+
+---
+
+## 🤔 Ne İşe Yarar?
+
+Her yeni sekme açtığınızda karşınıza gelen boş sayfayı hiç düşündünüz mü? Nova Tab, o boş sayfayı tamamen devralerek kişiselleştirilmiş, canlı ve üretken bir çalışma alanına dönüştürür.
+
+- **Dikkat dağıtmadan bilgi**: Hava durumu, döviz/kripto kurları, günün haberleri ve NASA fotoğrafı — hepsi tek bakışta.
+- **Hız ve erişim**: En çok kullandığınız sitelere sürükle-bırak kısayollarla tek tıkla ulaşın; arama motorları arasında anında geçiş yapın.
+- **Üretkenlik**: Notlarınız, görev listeniz ve çalışma alanlarınız her açtığınız sekmede sizi bekler.
+- **Estetik**: Canlı lo-fi/yağmur/siberpunk video arka planlar ve imlecinize tepki veren parçacık katmanı ile çalışmak keyifli hale gelir.
+- **Güvenli & Yerel**: Hiçbir sunucu yok, hiçbir telemetri yok. Tüm veriler tarayıcınızda (Google Sync dahil) tutulur.
+
+---
+
+## 📸 Ekran Görüntüsü
+
+<div align="center">
+
+![Nova Tab Ekran Görüntüsü](docs/screenshot-new.png)
+
+</div>
+
+---
+
+## 🎬 Canlı Demo
+
+<div align="center">
+
+![Nova Tab Demo GIF](docs/demo.gif)
 
 </div>
 
@@ -88,6 +118,9 @@ NovaTab/
 ├── newtab.html            # Ana sayfa arayüzü
 ├── css/
 │   └── style.css          # Tüm stiller (glassmorphism, temalar)
+├── docs/                  # Görsel belgeler
+│   ├── screenshot-new.png # Ekran görüntüsü
+│   └── demo.gif           # Canlı demo animasyonu
 ├── icons/                 # Eklenti ikonları (16/48/128)
 └── js/
     ├── app.js             # Ana orkestratör: temalar, ayarlar, senkron
